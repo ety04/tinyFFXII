@@ -1,0 +1,3 @@
+# TinyFFXII
+
+This branch of the repository is where the new features developed will be put and tested, such as: add variety of actions (attacks and magicks), add weapon choice, add locations...

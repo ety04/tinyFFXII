@@ -1,20 +1,35 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/phon_coast.png</file>
+        <file>sons/punch.wav</file>
+        <file>sons/salika.mp3</file>
+        <file>images/lieux/phon_coast.png</file>
+        <file>images/lieux/salika.png</file>
+        <file>images/persos/ashe2.png</file>
+        <file>images/persos/balthier.png</file>
+        <file>images/persos/basch.png</file>
+        <file>images/persos/fran.png</file>
+        <file>images/persos/larsa.png</file>
+        <file>images/persos/penelo.png</file>
+        <file>images/persos/vaan.png</file>
+        <file>images/cristal.png</file>
+        <file>images/sound_off_inv.png</file>
+        <file>images/sound_on_inv.png</file>
         <file>images/bleu.jpg</file>
-        <file>images/ashe2.png</file>
-        <file>images/vaan.png</file>
-        <file>images/balthier.png</file>
-        <file>images/fran.png</file>
-        <file>images/larsa.png</file>
-        <file>images/basch.png</file>
-        <file>images/penelo.png</file>
-        <file>images/wraith_apparition.png</file>
         <file>images/excalibur.png</file>
         <file>images/oofl.png</file>
-        <file>sons/phon.mp3</file>
         <file>images/sound_off.png</file>
         <file>images/sound_on.png</file>
+        <file>images/wraith_apparition.png</file>
+        <file>sons/phon.mp3</file>
         <file>sons/shot.wav</file>
+        <file>images/lieux/desert_est.png</file>
+        <file>sons/desert_est.mp3</file>
+        <file>sons/teleport.wav</file>
+        <file>images/lieux/paramina.png</file>
+        <file>sons/paramina.mp3</file>
+        <file>images/mandragore.png</file>
+        <file>images/mandragora.png</file>
+        <file>images/flame.png</file>
+        <file>sons/feu2.wav</file>
     </qresource>
 </RCC>
