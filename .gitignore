@@ -1,3 +1,11 @@
+
+CombatAmeliore/.gitignore
+CombatAmeliore/README.md
+
+#build directories
+build-CombatAmeliore-Desktop-Debug/
+build-CombatAmeliore-Desktop-Release/
+
 #Qt project files
 *.pro.user.*
 *.pro.user
