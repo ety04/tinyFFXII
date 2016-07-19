@@ -1,7 +1,7 @@
 #include "mainwindow.h"
-#include "testmainwindow.h"
-#include "testallie.h"
-#include "testsysteme.h"
+#include "test/testmainwindow.h"
+#include "test/testallie.h"
+#include "test/testsysteme.h"
 #include <QApplication>
 #include <QTextCodec>
 
@@ -16,10 +16,6 @@ int main(int argc, char *argv[])
     //QTextCodec::setCodecForCStrings( QTextCodec::codecForName("utf8") );
     MainWindow w(1000, 700);
     w.show();
-
-    /*TestRunner testrunner;
-    testrunner.addTest(new TestMainWindow());
-    qDebug() << "Overall result: " << (testrunner.runTests()?"PASS":"FAIL");*/
 
     return a.exec();
 }

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <list>
 #include <random>
+#include <map>
 
 #include <QMainWindow>
 
@@ -20,13 +21,19 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMediaPlayer>
+#include <QComboBox>
 
-#include <mylabel.h>
-#include <mytextedit.h>
-#include <mybutton.h>
-#include <balthier.h>
-#include <apparition.h>
-#include <systeme.h>
+#include "helpers/mylabel.h"
+#include "helpers/mytextedit.h"
+#include "helpers/mybutton.h"
+#include "helpers/mytimer.h"
+#include "helpers/mycombobox.h"
+#include "target/balthier.h"
+#include "target/fran.h"
+#include "target/apparition.h"
+#include "target/mandragore.h"
+#include "environment/lieu.h"
+#include "systeme.h"
 
 
 class MainWindow : public QMainWindow
@@ -42,7 +49,15 @@ public:
     void prepareLog();
     void prepareTable();
     void prepareMenus();
-    void genericBio(int x, int y, int r, int g, int b, QString& description);
+    void prepareLieux();
+    void prepareTeleportation();
+    void genericBio(int x, int y, int r, int g, int b, QString& description); 
+    void bioCombat(Ennemi& e);
+    void setArrPlan(const QString& image);
+    void setMusique(const QString& musique);
+    void setTheme(Lieu& nouveauLieu);
+    void setTheme(const QString& nomDeZone);
+    void setEnnemi(Ennemi& ennemi, const QString &image, QGridLayout* grille, const QString &bio);
     ~MainWindow();
 
 private:
@@ -51,27 +66,39 @@ private:
     QTextEdit* log;
     QWidget* tableau;
     MyLabel* deroulement;
-    MyButton* balthierAttaque;
+    MyButton* thablierAttaque, *frANAttaque;
     MyButton* recommencer;
     QMediaPlayer* player;
-    Balthier bal;
+    QMediaPlayer* soundBim;
+    MyTimer* timer1, *timer2, *timerBioCombat;
+    Balthier* bal;
+    Fran* fra;
     Systeme sys;
+    std::map<QString, Lieu*> lieux;
+    Lieu* carteActuelle;
+    MyComboBox* teleportation;
 
 public slots:
 
     void soundOnOff();
     void aPropos();
-    void vaanBio(int xBio, int yBio);
-    void balthierBio(int xBio, int yBio);
-    void franBio(int xBio, int yBio);
-    void baschBio(int xBio, int yBio);
-    void asheBio(int xBio, int yBio);
-    void peneloBio(int xBio, int yBio);
+    void vanBio(int xBio, int yBio);
+    void thablierBio(int xBio, int yBio);
+    void frANBio(int xBio, int yBio);
+    void batchBio(int xBio, int yBio);
+    void atcheBio(int xBio, int yBio);
+    void peuneuloBio(int xBio, int yBio);
 
-    void ennemiBio(int xBio, int yBio);
+    void ennemiBio(int xBio, int yBio, QString &bio);
 
-    void attaqueSimple(Allie &a, Ennemi &e);
+    void attaqueSimple(Allie *a, Ennemi &e);
+    void feuSimple(Allie *a, Ennemi &e);
+    void attaqueRetourPreparation(Ennemi &e, Allie *a);
+    void attaqueRetour(Ennemi &e, Allie *a);
+    void affichageAttaque(Cible& attaquant, Cible& victime);
     void reinitialiser(Ennemi& e);
+
+    void seTeleporter(int index);
 
 };
 

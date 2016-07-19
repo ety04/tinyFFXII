@@ -11,51 +11,61 @@ QT       += core gui \
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = CombatSimple
+TARGET = CombatAmeliore
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    testmainwindow.cpp \
-    mylabel.cpp \
-    cible.cpp \
-    mytextedit.cpp \
-    equipement.cpp \
-    allie.cpp \
-    testallie.cpp \
-    ennemi.cpp \
-    apparition.cpp \
-    balthier.cpp \
-    arme.cpp \
-    fusil.cpp \
     systeme.cpp \
-    testsysteme.cpp \
-    mybutton.cpp
+    environment/lieu.cpp \
+    equip/arme.cpp \
+    equip/equipement.cpp \
+    equip/fusil.cpp \
+    helpers/common.cpp \
+    helpers/mybutton.cpp \
+    helpers/mycombobox.cpp \
+    helpers/mylabel.cpp \
+    helpers/mytextedit.cpp \
+    helpers/mytimer.cpp \
+    target/allie.cpp \
+    target/apparition.cpp \
+    target/balthier.cpp \
+    target/cible.cpp \
+    target/ennemi.cpp \
+    test/testallie.cpp \
+    test/testmainwindow.cpp \
+    test/testsysteme.cpp \
+    target/mandragore.cpp \
+    target/fran.cpp
 
 HEADERS  += mainwindow.h \
-    testrunner.h \
-    testmainwindow.h \
-    mylabel.h \
-    cible.h \
-    mytextedit.h \
-    equipement.h \
-    allie.h \
-    testallie.h \
-    ennemi.h \
-    apparition.h \
-    balthier.h \
-    arme.h \
-    fusil.h \
     systeme.h \
-    common.h \
-    testsysteme.h \
-    mybutton.h
+    environment/lieu.h \
+    equip/arme.h \
+    equip/equipement.h \
+    equip/fusil.h \
+    helpers/common.h \
+    helpers/mybutton.h \
+    helpers/mycombobox.h \
+    helpers/mylabel.h \
+    helpers/mytextedit.h \
+    helpers/mytimer.h \
+    target/allie.h \
+    target/apparition.h \
+    target/balthier.h \
+    target/cible.h \
+    target/ennemi.h \
+    test/testallie.h \
+    test/testmainwindow.h \
+    test/testsysteme.h \
+    target/mandragore.h \
+    target/fran.h
 
 FORMS    += mainwindow.ui
 
 RESOURCES += \
-    image.qrc
+    media.qrc
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/release/
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/debug/
