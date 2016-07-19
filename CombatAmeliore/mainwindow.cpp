@@ -137,6 +137,7 @@ void MainWindow::prepareTable()
     connect(recommencer, SIGNAL(buttonClickedForReset(Ennemi&)), this, SLOT(reinitialiser(Ennemi&)));
     recommencer->setVisible(false);
 
+    // Création des ennemis
     //Apparition* ap = new Apparition();
     Mandragore *ma = new Mandragore();
     //setEnnemi(*ap, ":/images/wraith_apparition.png", grille, "BOOOOOOOOOOOOOOOOOUH!");
@@ -185,6 +186,7 @@ void MainWindow::prepareMenus()
     menuBar()->setPalette(QPalette(QColor("grey")));
 }
 
+/** Cette méthode initialise les lieux possibles de la fenêtre globale */
 void MainWindow::prepareLieux()
 {
     Lieu* coteDePhon = new Lieu(":/images/lieux/phon_coast.png", "qrc:/sons/phon.mp3");
@@ -198,6 +200,7 @@ void MainWindow::prepareLieux()
     carteActuelle = lieux.begin()->second; // obtenir la valeur du premier élément de la map
 }
 
+/** Cette méthode initialise le cristal de téléportation et sa liste déroulante */
 void MainWindow::prepareTeleportation()
 {
     MyLabel* cristal = new MyLabel(this);
@@ -327,6 +330,7 @@ void MainWindow::genericBio(int x, int y, int r, int g, int b, QString& descript
     bio->show();
 }
 
+/** Cette méthode affiche le cri du monstre au-dessus de son image lorsqu'il contre-attaque */
 void MainWindow::bioCombat(Ennemi &e)
 {
     cout << "biocombat appelé" << endl;
@@ -398,6 +402,7 @@ void MainWindow::attaqueSimple(Allie* a, Ennemi& e)
     }
 }
 
+/** Cette méthode, appelée avec le bouton Feu, lance une attaque Feu2 sur l'ennemi à l'écran */
 void MainWindow::feuSimple(Allie *a, Ennemi &e)
 {
     setLog(e.getNom() + " prépare l'action: ", e.getActionPrincipale(), *log);
@@ -450,6 +455,7 @@ void MainWindow::feuSimple(Allie *a, Ennemi &e)
     }
 }
 
+/** Les méthodes suivantes servent à la contre-attaque du monstre */
 void MainWindow::attaqueRetourPreparation(Ennemi &e, Allie *a)
 {
     cout << "2°°° Méthode de préparation" << endl;
@@ -512,6 +518,7 @@ void MainWindow::reinitialiser(Ennemi& e)
     frANAttaque->setEnnemi(e);
 }
 
+/** Ce slot se charge d'activer/désactiver la musique de fond et change les icônes en conséquence */
 void MainWindow::soundOnOff()
 {
     if(soundOn) // le son est activé et le slot a été enclenché
@@ -534,6 +541,7 @@ void MainWindow::soundOnOff()
     }
 }
 
+/** Cette méthode modifie l'arrière-plan de la fenêtre principale avec l'URI donnée */
 void MainWindow::setArrPlan(const QString &image)
 {
     QPalette p(palette());
@@ -541,6 +549,7 @@ void MainWindow::setArrPlan(const QString &image)
     setPalette(p);
 }
 
+/** Cette méthode modifie la musique de fond avec l'URI donnée */
 void MainWindow::setMusique(const QString &musique)
 {
     player->setMedia(QUrl(musique));
@@ -553,6 +562,7 @@ void MainWindow::setMusique(const QString &musique)
     soundOn = true;
 }
 
+/** Ces méthodes modifient le thème (arrière-plan + musique) selon le lieu en paramètre */
 void MainWindow::setTheme(Lieu& nouveauLieu)
 {
     carteActuelle = &nouveauLieu;
@@ -565,6 +575,7 @@ void MainWindow::setTheme(const QString& nomDeZone)
     setTheme(*lieux[nomDeZone]);
 }
 
+/** Cette méthode permet de changer l'ennemi à l'écran */
 void MainWindow::setEnnemi(Ennemi &ennemi, const QString& image, QGridLayout *grille, const QString& bio)
 {
     MyLabel* enn = new MyLabel();
@@ -577,6 +588,7 @@ void MainWindow::setEnnemi(Ennemi &ennemi, const QString& image, QGridLayout *gr
     grille->addWidget(enn, 1, 2, 6, 1);
 }
 
+/** Cette méthode change le thème de la fenêtre principale selon le lieu sélectionné dans la liste déroulante du cristal orange */
 void MainWindow::seTeleporter(int index)
 {
     int currentIndex = teleportation->currentIndex();

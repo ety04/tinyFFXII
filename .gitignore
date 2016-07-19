@@ -1,6 +1,7 @@
 
 CombatAmeliore/.gitignore
 CombatAmeliore/README.md
+package/
 
 #build directories
 build-CombatAmeliore-Desktop-Debug/
