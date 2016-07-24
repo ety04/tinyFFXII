@@ -12,6 +12,7 @@ public:
    MyLabel();
    MyLabel(QWidget * parent);
    MyLabel(QWidget * parent, Qt::WindowFlags f);
+   MyLabel(const QString & text, QWidget * parent);
    MyLabel(const QString & text, QWidget * parent, Qt::WindowFlags f);
    MyLabel(int red, int green, int blue, QWidget * parent);
    MyLabel(const QString & text, int red, int green, int blue, QWidget * parent);

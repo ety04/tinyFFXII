@@ -5,14 +5,18 @@
 #include <map>
 #include <vector>
 #include <QString>
+#include <QObject>
 
 #include "../equip/equipement.h"
 
 class Cible
 {
-    public:
+
+public:
+
 	Cible();
     Cible(QString nom);
+    virtual ~Cible();
 	
     QString& getNom();
     void setNom(const QString &value);

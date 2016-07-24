@@ -3,8 +3,9 @@
 using namespace std;
 
 Mandragore::Mandragore() :
-    Ennemi("Mandragore")
+    Ennemi(QObject::tr("Mandragore"))
 {
+    setId("mandragore");
     setNiveau(aleatoireInt(34, 37));
     setPVmax(aleatoireInt(2739, 3099)); setPV(getPVmax());
     setPMmax(999); setPM(getPMmax());
@@ -18,20 +19,13 @@ Mandragore::Mandragore() :
     setStat("vigueur", aleatoireInt(48, 57));
     setStat("vitesse", 21);
 
-    setExpDonnee(aleatoireInt(607, 919));
-    setButin("Fruit succulent");
-    setActionPrincipale("Charge");
+    setActionPrincipale(QObject::tr("Charge"));
     setCri("niark niark");
+    setFaiblesse(feu);
+    setExpDonnee(aleatoireInt(607, 919));
+    setButin(QObject::tr("Fruit succulent"));
+    setLienImage(":/images/monstres/mandragore.png");
 
     cout << "EXPERIENCE DE LA MANDRAGORE: " << getExpDonnee() << endl;
-}
-
-unsigned int Mandragore::aleatoireInt(unsigned int min, unsigned int max)
-{
-    random_device rd;
-    mt19937 eng(rd());
-    uniform_int_distribution<> distr(min, max);
-
-    return distr(eng);
 }
 

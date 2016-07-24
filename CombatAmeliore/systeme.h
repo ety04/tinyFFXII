@@ -1,10 +1,11 @@
 #ifndef SYSTEME_H
 #define SYSTEME_H
 
-#include <target/cible.h>
-#include <target/allie.h>
-#include <target/ennemi.h>
-#include <equip/equipement.h>
+#include "target/cible.h"
+#include "target/allie.h"
+#include "target/ennemi.h"
+#include "equip/equipement.h"
+#include "helpers/common.h"
 
 #include <string>
 #include <iostream>
@@ -18,7 +19,6 @@ public:
     void attaqueSimpleFusil(Allie& a, Ennemi& e);
     void attaqueMonstre(Ennemi& e, Allie& a);
     void feu2(Allie& a, Ennemi& e);
-    double aleatoire();
 };
 
 #endif // SYSTEME_H

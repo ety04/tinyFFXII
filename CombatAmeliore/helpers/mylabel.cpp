@@ -17,6 +17,11 @@
     {
     }
 
+    MyLabel::MyLabel(const QString & text, QWidget * parent = 0)
+        :QLabel(text, parent)
+    {
+    }
+
     MyLabel::MyLabel(const QString & text, QWidget * parent = 0, Qt::WindowFlags f = 0)
         :QLabel(text, parent, f)
     {

@@ -73,6 +73,8 @@ void Systeme::feu2(Allie &a, Ennemi &e)
     double myrando = aleatoire();
     double dmgD = (70 * myrando - e.getStat("défense magique")) * (2 + a.getStat("magie") * (a.getNiveau() + a.getStat("magie"))/256);
     unsigned int dmg = round(dmgD);
+    if(e.getFaiblesse() == feu)
+        dmg *= 2;
     if((e.getPV() - dmg) > e.getPVmax())
     {
         e.setPV(0);
@@ -88,11 +90,3 @@ void Systeme::feu2(Allie &a, Ennemi &e)
     }
 }
 
-double Systeme::aleatoire()
-{
-    random_device rd;
-    mt19937 eng(rd());
-    uniform_real_distribution<> distr(1, 1.125);
-
-    return distr(eng);
-}

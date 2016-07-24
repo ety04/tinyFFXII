@@ -4,11 +4,16 @@
 #include "test/testsysteme.h"
 #include <QApplication>
 #include <QTextCodec>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
+
+    QTranslator translator;
+    translator.load("combatameliore_en");
+    a.installTranslator(&translator);
 
     TestMainWindow::runTests();
     TestAllie::runTests();

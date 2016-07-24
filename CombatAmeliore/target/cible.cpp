@@ -5,7 +5,7 @@ using namespace std;
 
 Cible::Cible()
 {
-	
+    nom = "";
 }
 
 Cible::Cible(QString nom)
@@ -170,4 +170,9 @@ void Cible::setStats(const std::map<std::string, unsigned int> &value)
 void Cible::setStat(std::string stat, unsigned int value)
 {
     this->stats[stat] = value;
+}
+
+Cible::~Cible()
+{
+
 }

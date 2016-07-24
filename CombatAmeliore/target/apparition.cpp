@@ -1,8 +1,9 @@
 #include "apparition.h"
 
-Apparition::Apparition()
+Apparition::Apparition() :
+    Ennemi(QObject::tr("Apparition"))
 {
-   setNom("Apparition");
+   setId("apparition");
    setNiveau(9);
    setPVmax(5146); setPV(getPVmax());
    setPMmax(600); setPM(getPMmax());
@@ -16,6 +17,7 @@ Apparition::Apparition()
    setStat("vigueur", 33);
    setStat("vitesse", 15);
 
-   setActionPrincipale("Glas");
-   setCri("BOOOOOOOOOOOOOOOOOUH!");
+   setActionPrincipale(QObject::tr("Glas"));
+   setCri(QObject::tr("BOOOOOOOOOOOOOOOOOUH!"));
+   setLienImage(":/images/monstres/wraith_apparition.png");
 }

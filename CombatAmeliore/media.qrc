@@ -14,12 +14,6 @@
         <file>images/cristal.png</file>
         <file>images/sound_off_inv.png</file>
         <file>images/sound_on_inv.png</file>
-        <file>images/bleu.jpg</file>
-        <file>images/excalibur.png</file>
-        <file>images/oofl.png</file>
-        <file>images/sound_off.png</file>
-        <file>images/sound_on.png</file>
-        <file>images/wraith_apparition.png</file>
         <file>sons/phon.mp3</file>
         <file>sons/shot.wav</file>
         <file>images/lieux/desert_est.png</file>
@@ -27,9 +21,20 @@
         <file>sons/teleport.wav</file>
         <file>images/lieux/paramina.png</file>
         <file>sons/paramina.mp3</file>
-        <file>images/mandragore.png</file>
-        <file>images/mandragora.png</file>
         <file>images/flame.png</file>
         <file>sons/feu2.wav</file>
+        <file>images/bleu.jpg</file>
+        <file>images/excalibur.png</file>
+        <file>images/oofl.png</file>
+        <file>images/sound_off.png</file>
+        <file>images/sound_on.png</file>
+        <file>images/change.png</file>
+        <file>images/monstres/mandragore.png</file>
+        <file>images/monstres/wraith_apparition.png</file>
+        <file>images/monstres/destrier_fantome.png</file>
+        <file>images/monstres/gelee.png</file>
+        <file>images/monstres/poulatrice.png</file>
+        <file>images/monstres/treant.png</file>
+        <file>images/arcturus.png</file>
     </qresource>
 </RCC>

@@ -2,10 +2,12 @@
 #define ENNEMI_H
 
 #include "cible.h"
-#include <QString>
+#include "helpers/common.h"
+#include "helpers/mylabel.h"
 
 class Ennemi : public Cible
 {
+
 public:
     Ennemi();
     Ennemi(QString nom);
@@ -25,12 +27,24 @@ public:
     unsigned int getExpDonnee();
     void setExpDonnee(unsigned int value);
 
+    Element getFaiblesse();
+    void setFaiblesse(const Element &value);
+
+    QString getLienImage();
+    void setLienImage(const QString &value);
+
+    QString getId();
+    void setId(const QString &value);
+
 private:
+    QString id;
     bool agressif;
     QString butin;
     QString actionPrincipale;
     QString cri;
     unsigned int expDonnee;
+    Element faiblesse;
+    QString lienImage;
 };
 
 #endif // ENNEMI_H

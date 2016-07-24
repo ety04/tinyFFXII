@@ -37,7 +37,11 @@ SOURCES += main.cpp\
     test/testmainwindow.cpp \
     test/testsysteme.cpp \
     target/mandragore.cpp \
-    target/fran.cpp
+    target/fran.cpp \
+    target/destrierfantome.cpp \
+    target/poulatrice.cpp \
+    target/gelee.cpp \
+    target/treant.cpp
 
 HEADERS  += mainwindow.h \
     systeme.h \
@@ -60,7 +64,13 @@ HEADERS  += mainwindow.h \
     test/testmainwindow.h \
     test/testsysteme.h \
     target/mandragore.h \
-    target/fran.h
+    target/fran.h \
+    target/destrierfantome.h \
+    target/poulatrice.h \
+    target/gelee.h \
+    target/treant.h
+
+TRANSLATIONS = combatameliore_en.ts
 
 FORMS    += mainwindow.ui
 

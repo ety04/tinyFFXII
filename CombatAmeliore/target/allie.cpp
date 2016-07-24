@@ -2,7 +2,8 @@
 
 using namespace std;
 
-Allie::Allie()
+Allie::Allie() :
+    Cible()
 {
 
 }

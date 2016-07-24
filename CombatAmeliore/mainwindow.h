@@ -6,6 +6,7 @@
 #include <list>
 #include <random>
 #include <map>
+#include <iterator>
 
 #include <QMainWindow>
 
@@ -32,6 +33,10 @@
 #include "target/fran.h"
 #include "target/apparition.h"
 #include "target/mandragore.h"
+#include "target/destrierfantome.h"
+#include "target/poulatrice.h"
+#include "target/gelee.h"
+#include "target/treant.h"
 #include "environment/lieu.h"
 #include "systeme.h"
 
@@ -51,16 +56,19 @@ public:
     void prepareMenus();
     void prepareLieux();
     void prepareTeleportation();
+    void prepareEnnemis();
     void genericBio(int x, int y, int r, int g, int b, QString& description); 
     void bioCombat(Ennemi& e);
     void setArrPlan(const QString& image);
     void setMusique(const QString& musique);
     void setTheme(Lieu& nouveauLieu);
     void setTheme(const QString& nomDeZone);
-    void setEnnemi(Ennemi& ennemi, const QString &image, QGridLayout* grille, const QString &bio);
+    void setEnnemi(Ennemi& ennemi);
+    void setEnnemi(QString &ennemi);
     ~MainWindow();
 
 private:
+    QGridLayout* grille;
     MyLabel* sound;
     bool soundOn;
     QTextEdit* log;
@@ -77,6 +85,8 @@ private:
     std::map<QString, Lieu*> lieux;
     Lieu* carteActuelle;
     MyComboBox* teleportation;
+    std::map<QString, Ennemi*> ennemis;
+    Ennemi* monstreActuel;
 
 public slots:
 
@@ -99,6 +109,7 @@ public slots:
     void reinitialiser(Ennemi& e);
 
     void seTeleporter(int index);
+    void changeEnnemi();
 
 };
 

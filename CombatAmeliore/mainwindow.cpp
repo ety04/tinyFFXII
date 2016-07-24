@@ -33,6 +33,7 @@ MainWindow::MainWindow(int width, int height)
     prepareTable();
     prepareMenus();
     prepareTeleportation();
+    prepareEnnemis();
 
 }
 
@@ -53,10 +54,13 @@ void MainWindow::prepareLog()
     log->viewport()->setAutoFillBackground(false);
     log->resize(300, 100);
     log->move(0, 23);
-    setLog("Ceci est le log par défaut", *log);
-    setLog("Bienvenue dans mon petit programme!", *log);
+    setLog(tr("Ceci est le log par défaut"), *log);
+    setLog(tr("Bienvenue dans mon petit programme!"), *log);
     log->show();
     cout << "Log: " << (getLog(log)).toStdString() << endl;
+
+    // Création du log de déroulement des combats
+    deroulement = new MyLabel(this);
 }
 
 
@@ -67,21 +71,21 @@ void MainWindow::prepareTable()
     tableau = new QWidget(this);
     tableau->move(150, 120);
     tableau->resize(700, 500);
-    QGridLayout* grille = new QGridLayout();
+    grille = new QGridLayout();
 
     // Création des en-têtes des colonnes du tableau
-    QLabel* header1 = new QLabel("Personnages");
+    QLabel* header1 = new QLabel(tr("Personnages"));
     QPalette headerpalette;
     headerpalette.setColor(QPalette::Window, Qt::white);
     headerpalette.setColor(QPalette::WindowText, Qt::red);
     header1->setPalette(headerpalette);
     header1->setAlignment(Qt::AlignCenter);
     header1->setAutoFillBackground(true);
-    QLabel* header2 = new QLabel("Action");
+    QLabel* header2 = new QLabel(tr("Action"));
     header2->setPalette(headerpalette);
     header2->setAlignment(Qt::AlignCenter);
     header2->setAutoFillBackground(true);
-    QLabel* header3 = new QLabel("Cibles");
+    QLabel* header3 = new QLabel(tr("Cibles"));
     header3->setPalette(headerpalette);
     header3->setAlignment(Qt::AlignCenter);
     header3->setAutoFillBackground(true);
@@ -125,26 +129,22 @@ void MainWindow::prepareTable()
     // Création des boutons d'action
     QIcon epee(QPixmap(":/images/excalibur.png"));
     QIcon flamme(QPixmap(":/images/flame.png"));
-    QPushButton* vanAttaque = new QPushButton(epee, "Attaquer");
-    thablierAttaque = new MyButton(epee, "Attaquer", bal);
-    frANAttaque = new MyButton(flamme, "Feu", fra);
-    QPushButton* batchAttaque = new QPushButton(epee, "Attaquer");
-    QPushButton* atcheAttaque = new QPushButton(epee, "Attaquer");
-    QPushButton* peuneuloAttaque = new QPushButton(epee, "Attaquer");
+    QIcon fusil(QPixmap(":/images/arcturus.png"));
+    QPushButton* vanAttaque = new QPushButton(epee, tr("Attaquer"));
+    thablierAttaque = new MyButton(fusil, tr("Attaquer"), bal);
+    frANAttaque = new MyButton(flamme, tr("Feu"), fra);
+    QPushButton* batchAttaque = new QPushButton(epee, tr("Attaquer"));
+    QPushButton* atcheAttaque = new QPushButton(epee, tr("Attaquer"));
+    QPushButton* peuneuloAttaque = new QPushButton(epee, tr("Attaquer"));
 
     // Connexion des boutons Attaque et Recommencer avec leurs fonctions respectives
-    recommencer = new MyButton("Recommencer", this);
+    recommencer = new MyButton(tr("Recommencer"), this);
     connect(recommencer, SIGNAL(buttonClickedForReset(Ennemi&)), this, SLOT(reinitialiser(Ennemi&)));
     recommencer->setVisible(false);
 
-    // Création des ennemis
-    //Apparition* ap = new Apparition();
-    Mandragore *ma = new Mandragore();
-    //setEnnemi(*ap, ":/images/wraith_apparition.png", grille, "BOOOOOOOOOOOOOOOOOUH!");
-    setEnnemi(*ma, ":/images/mandragore.png", grille, ma->getCri());
-
     connect(thablierAttaque, SIGNAL(buttonClickedForBattle(Allie*,Ennemi&)), this, SLOT(attaqueSimple(Allie*,Ennemi&)));
     connect(frANAttaque, SIGNAL(buttonClickedForBattle(Allie*,Ennemi&)), this, SLOT(feuSimple(Allie*,Ennemi&)));
+
 
     // Ajout des éléments précédents à la disposition du tableau
     grille->addWidget(header1, 0, 0);
@@ -162,6 +162,7 @@ void MainWindow::prepareTable()
     grille->addWidget(batchAttaque, 4, 1);
     grille->addWidget(atcheAttaque, 5, 1);
     grille->addWidget(peuneuloAttaque, 6, 1);
+
     tableau->setLayout(grille);
 
     //this->setCentralWidget(tableau);
@@ -171,15 +172,15 @@ void MainWindow::prepareTable()
 /** Cette méthode sert à préparer la barre de menus de la fenêtre globale */
 void MainWindow::prepareMenus()
 {
-    QMenu* fichier = menuBar()->addMenu("Fichier");
-    QAction* quitter = new QAction("&Quitter", this);
+    QMenu* fichier = menuBar()->addMenu(tr("Fichier"));
+    QAction* quitter = new QAction(tr("&Quitter"), this);
     quitter->setIcon(QIcon(":/images/oofl.png"));
-    quitter->setShortcut(QKeySequence("Ctrl+Q"));
+    quitter->setShortcut(QKeySequence(tr("Ctrl+Q", "Raccourci clavier pour Quitter")));
     connect(quitter, SIGNAL(triggered()), qApp, SLOT(quit()));
     fichier->addAction(quitter);
 
     QMenu* autre = menuBar()->addMenu("?");
-    QAction* apropos = new QAction("&A propos", this);
+    QAction* apropos = new QAction(tr("&A propos"), this);
     connect(apropos, SIGNAL(triggered()), this, SLOT(aPropos()));
     autre->addAction(apropos);
 
@@ -210,10 +211,10 @@ void MainWindow::prepareTeleportation()
     cristal->show();
 
     teleportation = new MyComboBox(this);
-    teleportation->addItem("Côte de Phon", QVariant::fromValue(lieux["phon"]));
-    teleportation->addItem("Forêt de Salika", QVariant::fromValue(lieux["salika"]));
-    teleportation->addItem("Désert Est", QVariant::fromValue(lieux["desert_est"]));
-    teleportation->addItem("Gorges de Paramina", QVariant::fromValue(lieux["paramina"]));
+    teleportation->addItem(tr("Côte de Phon"), QVariant::fromValue(lieux["phon"]));
+    teleportation->addItem(tr("Forêt de Salika"), QVariant::fromValue(lieux["salika"]));
+    teleportation->addItem(tr("Désert Est"), QVariant::fromValue(lieux["desert_est"]));
+    teleportation->addItem(tr("Gorges de Paramina"), QVariant::fromValue(lieux["paramina"]));
     teleportation->resize(150, 30);
     teleportation->move(10, 490);
     teleportation->setVisible(false);
@@ -221,6 +222,33 @@ void MainWindow::prepareTeleportation()
     connect(teleportation, SIGNAL(activated(int)), this, SLOT(seTeleporter(int)));
     connect(cristal, SIGNAL(clicked()), teleportation, SLOT(teleportOnOff()));
 
+}
+
+/** Cette méthode initialise les ennemis possibles et le bouton de changement */
+void MainWindow::prepareEnnemis()
+{
+    monstreActuel = new Ennemi();
+
+    // Création des ennemis
+    Apparition* ap = new Apparition();
+    Ennemi* ma = new Mandragore();
+    Treant* tr = new Treant();
+    Gelee* ge = new Gelee();
+    Poulatrice* po = new Poulatrice();
+    DestrierFantome* df = new DestrierFantome();
+    ennemis["apparition"] = ap;
+    ennemis["mandragore"] = ma;
+    ennemis["treant"] = tr;
+    ennemis["gelee"] = ge;
+    ennemis["poulatrice"] = po;
+    ennemis["destrier_fantome"] = df;
+
+    MyLabel* change = new MyLabel(this);
+    change->setPixmap(QPixmap(":/images/change.png"));
+    grille->addWidget(change, 6, 2, 1, 1, Qt::AlignCenter);
+    connect(change, SIGNAL(clicked()), this, SLOT(changeEnnemi()));
+
+    setEnnemi(*ma);
 }
 
 void MainWindow::setLog(const QString& text, QTextEdit& boiteDeLog)
@@ -249,10 +277,10 @@ void MainWindow::aPropos()
     MyTextEdit* apropos = new MyTextEdit(this);
     apropos->move(300, 50);
     apropos->resize(250, 170);
-    apropos->setText("Ceci est une application (très) basique développée à but expérimental et ludique.");
-    apropos->append("Les outils utilisés sont le langage C++ et la bibliothèque Qt 5.6 (avec Qt Creator 4).");
-    apropos->append("FINAL FANTASY XII appartient à SQUARE ENIX CO., LTD. Ce produit est purement à titre de fan.");
-    apropos->append("Version 0.2 ~ Copyleft Ety, 2016");
+    apropos->setText(tr("Ceci est une application (très) basique développée à but expérimental et ludique."));
+    apropos->append(tr("Les outils utilisés sont le langage C++ et la bibliothèque Qt 5.6 (avec Qt Creator 4)."));
+    apropos->append(tr("FINAL FANTASY XII appartient à SQUARE ENIX CO., LTD. Ce produit est purement à titre de fan."));
+    apropos->append("Version 0.3 ~ Copyleft Ety, 2016");
     apropos->setReadOnly(true);
     apropos->setFrameStyle(QFrame::Box);
     connect(apropos, SIGNAL(clicked()), apropos, SLOT(close()));
@@ -263,49 +291,49 @@ void MainWindow::aPropos()
 
 void MainWindow::vanBio(int xBio, int yBio)
 {
-    QString desc("Un jeune garçon de 17 ans vivant à Rabanastre. "
+    QString desc(tr("Un jeune garçon de 17 ans vivant à Rabanastre. "
                   "Ses principales occupations sont tuer des rats dans les égouts et voler les impériaux. "
-                  "Son rêve est de devenir pirate de l'air, mais est-ce là tout?");
+                  "Son rêve est de devenir pirate de l'air, mais est-ce là tout?"));
     genericBio(xBio, yBio, 119, 80, 239, desc);
 }
 
 void MainWindow::thablierBio(int xBio, int yBio)
 {
-    QString desc("Un pirate de l'air de 22 ans sillonnant les cieux d'Ivalice à bord de son vaisseau, le Sillage. "
+    QString desc(tr("Un pirate de l'air de 22 ans sillonnant les cieux d'Ivalice à bord de son vaisseau, le Sillage. "
                  "Il est attiré par les trésors, et notamment par une certaine pierre précieuse cachée à Rabanastre. "
-                 "Cependant, son passé et ses origines restent assez obscurs.");
+                 "Cependant, son passé et ses origines restent assez obscurs."));
     genericBio(xBio, yBio, 78, 183, 106, desc);
 }
 
 void MainWindow::frANBio(int xBio, int yBio)
 {
-    QString desc("Une viéra d'âge inconnu. Elle est la partenaire pirate de Balthier. "
+    QString desc(tr("Une viéra d'âge inconnu. Elle est la partenaire pirate de Balthier. "
                  "Habile avec tout type d'armes, elle maîtrise également les mécanismes du Sillage. "
-                 "Elle a une vaste connaissance d'Ivalice, mais est mal à l'aise avec une substance nommée 'myste'. De quoi s'agit-il?");
+                 "Elle a une vaste connaissance d'Ivalice, mais est mal à l'aise avec une substance nommée 'myste'. De quoi s'agit-il?"));
     genericBio(xBio, yBio, 218, 174, 53, desc);
 }
 
 void MainWindow::batchBio(int xBio, int yBio)
 {
-    QString desc("Un membre de l'Ordre des Chevaliers de Dalmasca, âgé de 36 ans. "
+    QString desc(tr("Un membre de l'Ordre des Chevaliers de Dalmasca, âgé de 36 ans. "
                  "Loyal envers ses compagnons et son roi, il change soudainement d'attitude pendant l'invasion archadienne. "
-                 "Suite à ces évènements, on le déclarera mort. Mais est-ce vraiment le cas?");
+                 "Suite à ces évènements, on le déclarera mort. Mais est-ce vraiment le cas?"));
     genericBio(xBio, yBio, 218, 86, 53, desc);
 }
 
 void MainWindow::atcheBio(int xBio, int yBio)
 {
-    QString desc("La princesse héritière du trône de Dalmasca, âgée de 19 ans. "
+    QString desc(tr("La princesse héritière du trône de Dalmasca, âgée de 19 ans. "
                  "Pour quelle raison son 'oncle' déclarera sa mort, tout comme celle de Basch, après la chute de son royaume? "
-                 "Quel est son ressenti suite à la perte de son pays, de son père et de son jeune époux? Quels choix fera-t-elle? ");
+                 "Quel est son ressenti suite à la perte de son pays, de son père et de son jeune époux? Quels choix fera-t-elle? "));
     genericBio(xBio, yBio, 243, 255, 124, desc);
 }
 
 void MainWindow::peuneuloBio(int xBio, int yBio)
 {
-    QString desc("Une jeune habitante de Rabanastre de 16 ans. "
+    QString desc(tr("Une jeune habitante de Rabanastre de 16 ans. "
                  "Amie de Vaan, elle aime la danse, servir ses amis, et travaille comme lui au magasin d'objets du vangaa Migelo. "
-                 "Elle s'inquiète pour Vaan et est protectrice envers lui, au point de vouloir l'accompagner dans sa prochaine aventure.");
+                 "Elle s'inquiète pour Vaan et est protectrice envers lui, au point de vouloir l'accompagner dans sa prochaine aventure."));
     genericBio(xBio, yBio, 249, 83, 227, desc);
 }
 
@@ -352,15 +380,14 @@ void MainWindow::bioCombat(Ennemi &e)
 /** Cette méthode, appelée avec le bouton Attaque, déclenche une attaque simple contre l'ennemi à l'écran */
 void MainWindow::attaqueSimple(Allie* a, Ennemi& e)
 {
-    setLog(e.getNom() + " prépare l'action: ", e.getActionPrincipale(), *log);
+    setLog(e.getNom() + tr(" prépare l'action: "), e.getActionPrincipale(), *log);
 
     // BOUM
     soundBim = new QMediaPlayer();
     soundBim->setMedia(QUrl("qrc:/sons/shot.wav"));
     soundBim->play();
 
-    // Création du panneau de description des actions
-    deroulement = new MyLabel(this);
+    // Initialisation du panneau de description des actions
     deroulement->setFrameStyle(QFrame::Panel || QFrame::Raised);
     deroulement->setLineWidth(3);
     deroulement->setPalette(QColor("white"));
@@ -382,14 +409,14 @@ void MainWindow::attaqueSimple(Allie* a, Ennemi& e)
     if(e.getPV() == 0)
     {
         e.setEtat("coma", true);
-        string ko = "\n\n" + e.getNom().toStdString() + " est dans le Coma! " + a->getNom().toStdString() + " a gagné la partie!";
-        deroulement->setText(deroulement->text() + QString::fromStdString(ko));
+        QString ko = "\n\n" + e.getNom() + tr(" est dans le Coma! ") + a->getNom() + tr(" a gagné la partie!");
+        deroulement->setText(deroulement->text() + ko);
         connect(deroulement, SIGNAL(clicked()), deroulement, SLOT(clear()));
         a->addButin(e.getButin());
-        setLog("\n" + a->getNom() + " obtient: ", e.getButin(), *log);
+        setLog("\n" + a->getNom() + tr(" obtient: "), e.getButin(), *log);
         a->addExp(e.getExpDonnee());
         QString exp = QString::fromStdString(to_string(e.getExpDonnee()));
-        deroulement->setText(deroulement->text() + QString("\n" + a->getNom() + " gagne " + exp + " points d'expérience"));
+        deroulement->setText(deroulement->text() + QString("\n" + a->getNom() + tr(" gagne ") + exp + tr(" points d'expérience")));
         recommencer->show();
     }
     else
@@ -405,7 +432,7 @@ void MainWindow::attaqueSimple(Allie* a, Ennemi& e)
 /** Cette méthode, appelée avec le bouton Feu, lance une attaque Feu2 sur l'ennemi à l'écran */
 void MainWindow::feuSimple(Allie *a, Ennemi &e)
 {
-    setLog(e.getNom() + " prépare l'action: ", e.getActionPrincipale(), *log);
+    setLog(e.getNom() + tr(" prépare l'action: "), e.getActionPrincipale(), *log);
 
     // BOUM
     soundBim = new QMediaPlayer();
@@ -435,14 +462,14 @@ void MainWindow::feuSimple(Allie *a, Ennemi &e)
     if(e.getPV() == 0)
     {
         e.setEtat("coma", true);
-        string ko = "\n\n" + e.getNom().toStdString() + " est dans le Coma! " + a->getNom().toStdString() + " a gagné la partie!";
-        deroulement->setText(deroulement->text() + QString::fromStdString(ko));
+        QString ko = "\n\n" + e.getNom() + tr(" est dans le Coma! ") + a->getNom() + tr(" a gagné la partie!");
+        deroulement->setText(deroulement->text() + ko);
         connect(deroulement, SIGNAL(clicked()), deroulement, SLOT(clear()));
         a->addButin(e.getButin());
-        setLog("\n" + a->getNom() + " obtient: ", e.getButin(), *log);
+        setLog("\n" + a->getNom() + tr(" obtient: "), e.getButin(), *log);
         a->addExp(e.getExpDonnee());
-        QString exp = QString::fromStdString(to_string(e.getExpDonnee()));
-        deroulement->setText(deroulement->text() + QString("\n" + a->getNom() + " gagne " + exp + " points d'expérience"));
+        QString exp = QString::number(e.getExpDonnee());
+        deroulement->setText(deroulement->text() + QString("\n" + a->getNom() + tr(" gagne ") + exp + tr(" points d'expérience")));
         recommencer->show();
     }
     else
@@ -461,9 +488,9 @@ void MainWindow::attaqueRetourPreparation(Ennemi &e, Allie *a)
     cout << "2°°° Méthode de préparation" << endl;
     cout << e.getNom().toStdString() << " ne se laisse pas faire face à " << a->getNom().toStdString() << "!" << endl;
     timer1->stopAndBlock();
-    deroulement->setText("CONTRE-ATTAQUE!");
+    deroulement->setText(tr("CONTRE-ATTAQUE!"));
     bioCombat(e);
-    setLog(e.getNom() + " prépare l'action: ", "Charge", *log);
+    setLog(e.getNom() + tr(" prépare l'action: "), tr("Charge"), *log);
     timer2 = new MyTimer("timerAttaqueRetour", e, a);
     connect(timer2, SIGNAL(timeoutNowAttack(Ennemi&,Allie*)), this, SLOT(attaqueRetour(Ennemi&,Allie*)));
     timer2->start(1500);
@@ -481,16 +508,16 @@ void MainWindow::attaqueRetour(Ennemi &e, Allie* a)
     affichageAttaque(e, *a);
     if(a->getPV() == 0)
     {
-        setLog(a->getNom() + " s'effondre...", *log);
+        setLog(a->getNom() + tr(" s'effondre..."), *log);
     }
 }
 
 /** Cette méthode s'occupe d'afficher une ligne ou deux sur le déroulement d'une attaque */
 void MainWindow::affichageAttaque(Cible &attaquant, Cible &victime)
 {
-    string detail = attaquant.getNom().toStdString() + " attaque! ---------- PV de " + victime.getNom().toStdString() + " : "
-            + to_string(victime.getPV()) + "/" + to_string(victime.getPVmax());
-    deroulement->setText(QString::fromStdString(detail));
+    QString detail = attaquant.getNom() + tr(" attaque! ---------- PV de ") + victime.getNom() + " : "
+            + QString::number(victime.getPV()) + "/" + QString::number(victime.getPVmax());
+    deroulement->setText(detail);
     cout << "/!\\ Les PV de " << victime.getNom().toStdString() << " sont à présent de "
          << victime.getPV() << " sur " << victime.getPVmax() << endl;
 }
@@ -508,11 +535,11 @@ void MainWindow::reinitialiser(Ennemi& e)
     cout << "Les PV de " << e.getNom().toStdString() << " ont été réinitialisés! "
          << e.getNom().toStdString() << " est de nouveau prêt à combattre" << endl;
     cout << "PV: " << e.getPV() << "/" << e.getPVmax() << endl;
-    string logtext = e.getNom().toStdString() + " prépare l'action ";
-    string highlight = "Soin5";
-    string detail = "PV de " + e.getNom().toStdString() + " : " + to_string(e.getPV()) + "/" + to_string(e.getPVmax());
-    setLog(QString::fromStdString(logtext), QString::fromStdString(highlight), *log);
-    deroulement->setText(QString::fromStdString(detail));
+    QString logtext = e.getNom() + tr(" prépare l'action ");
+    QString highlight = tr("Soin5");
+    QString detail = tr("PV de ") + e.getNom() + " : " + QString::number(e.getPV()) + "/" + QString::number(e.getPVmax());
+    setLog(logtext, highlight, *log);
+    deroulement->setText(detail);
 
     thablierAttaque->setEnnemi(e); // renvoi de l'ennemi soigné à disposition du bouton d'Attaque
     frANAttaque->setEnnemi(e);
@@ -576,16 +603,31 @@ void MainWindow::setTheme(const QString& nomDeZone)
 }
 
 /** Cette méthode permet de changer l'ennemi à l'écran */
-void MainWindow::setEnnemi(Ennemi &ennemi, const QString& image, QGridLayout *grille, const QString& bio)
+void MainWindow::setEnnemi(Ennemi &ennemi)
 {
+    // On supprime le monstre affiché avant d'en ramener un nouveau
+    if(monstreActuel->getNom() != "")
+        grille->itemAtPosition(1, 2)->widget()->deleteLater();
+
+    // On crée l'image du nouveau monstre
     MyLabel* enn = new MyLabel();
-    enn->setPixmap(QPixmap(image));
-    enn->setBio(bio);
+    enn->setPixmap(QPixmap(ennemi.getLienImage()));
+    enn->setBio(ennemi.getCri());
     thablierAttaque->setEnnemi(ennemi);
     frANAttaque->setEnnemi(ennemi);
     recommencer->setEnnemi(ennemi);
     connect(enn, SIGNAL(bigLabelClicked(int,int,QString&)), this, SLOT(ennemiBio(int,int,QString&)));
     grille->addWidget(enn, 1, 2, 6, 1);
+
+    grille->itemAtPosition(6, 2)->widget()->raise(); // on rehausse l'image de changement de monstre pour qu'elle reste visible
+
+    monstreActuel = &ennemi;
+}
+
+void MainWindow::setEnnemi(QString &ennemi)
+{
+    Ennemi* enn = ennemis[ennemi];
+    setEnnemi(*enn);
 }
 
 /** Cette méthode change le thème de la fenêtre principale selon le lieu sélectionné dans la liste déroulante du cristal orange */
@@ -600,6 +642,29 @@ void MainWindow::seTeleporter(int index)
     son->play();
     setTheme(*currentData);
     teleportation->setVisible(false);
+}
+
+/** Ce slot permet de déclencher le changement d'ennemi à l'écran
+    Premier élément de la map = ennemis.begin()
+    Dernier élément de la map = ennemis.end() - 1    // ennemis.end() pointe sur celui suivant la fin */
+void MainWindow::changeEnnemi()
+{
+    cout << "Ennemi 1: " << ennemis.begin()->second->getNom().toStdString() << endl;
+    cout << "Ennemi 2: " << (--ennemis.end())->second->getNom().toStdString() << endl;
+    QString nom = monstreActuel->getId();
+    cout << "Ennemi actuel: " << nom.toStdString() << endl;
+    map<QString, Ennemi*>::iterator it0, it;
+    it0 = ennemis.find(nom);
+    if(it0 == --ennemis.end()) // si on est à la fin de la map
+        it = ennemis.begin(); // on revient au début
+    else
+        it = next(it0); // sinon on prend l'élément suivant
+    cout << "Ennemi suivant: " << it->second->getId().toStdString() << endl;
+    setEnnemi(*(it->second));
+    setLog(it->second->getNom() + tr(" prépare l'action: "), it->second->getActionPrincipale(), *log);
+    QString changement = tr("L'ennemi est ") + it->second->getNom() + tr(" --- (PV: ")
+            + QString::number(it->second->getPV()) + "/" + QString::number(it->second->getPVmax()) + ")";
+    deroulement->setText(changement);
 }
 
 MainWindow::~MainWindow()

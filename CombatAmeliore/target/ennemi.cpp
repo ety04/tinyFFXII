@@ -2,15 +2,24 @@
 
 using namespace std;
 
-Ennemi::Ennemi()
+Ennemi::Ennemi() :
+    Cible()
 {
     agressif = true;
+    cri = "";
+    butin = QObject::tr("Caillou");
+    expDonnee = 0;
+    actionPrincipale = QObject::tr("Charge");
 }
 
 Ennemi::Ennemi(QString nom) :
     Cible(nom)
 {
     agressif = true;
+    cri = "";
+    butin = QObject::tr("Caillou");
+    expDonnee = 0;
+    actionPrincipale = QObject::tr("Charge");
 }
 
 bool Ennemi::getAgressif() const
@@ -61,4 +70,34 @@ unsigned int Ennemi::getExpDonnee()
 void Ennemi::setExpDonnee(unsigned int value)
 {
     expDonnee = value;
+}
+
+Element Ennemi::getFaiblesse()
+{
+    return faiblesse;
+}
+
+void Ennemi::setFaiblesse(const Element &value)
+{
+    faiblesse = value;
+}
+
+QString Ennemi::getLienImage()
+{
+    return lienImage;
+}
+
+void Ennemi::setLienImage(const QString &value)
+{
+    lienImage = value;
+}
+
+QString Ennemi::getId()
+{
+    return id;
+}
+
+void Ennemi::setId(const QString &value)
+{
+    id = value;
 }
