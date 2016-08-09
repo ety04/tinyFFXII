@@ -8,13 +8,13 @@ class Arme : public Equipement
 {
 public:
     Arme();
-    Arme(std::string nom);
-    Arme(std::string nom, unsigned int att);
+    Arme(QString nom);
+    Arme(QString nom, unsigned int att);
 
     unsigned int getAttaque() const;
     void setAttaque(unsigned int value);
 
-private:
+protected:
     unsigned int attaque;
     Element element;
 };

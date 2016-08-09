@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-
+    qRegisterMetaType<const Fusil *>("const Fusil *");
     QApplication a(argc, argv);
 
     QTranslator translator;

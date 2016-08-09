@@ -2,6 +2,7 @@
 #define MYLABEL_H
 
 #include <QLabel>
+#include <iostream>
 
 //header
 class MyLabel : public QLabel
@@ -28,10 +29,18 @@ signals:
    void clicked();
    void labelClicked(int xBio, int yBio);
    void bigLabelClicked(int x, int y, QString& bio);
+   void agrandis();
+   void reduis();
 
+private slots:
+   void setPicArme(QString& id);
+   void agrandir();
+   void reduire();
 
 protected:
    void mousePressEvent(QMouseEvent*);
+   void enterEvent(QEvent*);
+   void leaveEvent(QEvent*);
 };
 
 #endif // MYLABEL_H

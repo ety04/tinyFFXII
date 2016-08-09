@@ -7,8 +7,6 @@
 #include <QString>
 #include <QObject>
 
-#include "../equip/equipement.h"
-
 class Cible
 {
 

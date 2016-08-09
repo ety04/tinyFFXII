@@ -1,16 +1,18 @@
 #ifndef EQUIPEMENT_H
 #define EQUIPEMENT_H
 
-#include <string>
+#include <QString>
 
 class Equipement
 {
 public:
     Equipement();
-    Equipement(std::string nom);
+    Equipement(QString nom);
 
-private:
-    std::string nom;
+    QString getNom() const;
+
+protected:
+    QString nom;
 };
 
 #endif // EQUIPEMENT_H

@@ -2,7 +2,9 @@
 #define MYBUTTON_H
 
 #include <QPushButton>
+#include <QString>
 #include "../target/allie.h"
+#include "target/balthier.h"
 #include "../target/apparition.h"
 
 //header
@@ -34,6 +36,10 @@ signals:
    void clicked();
    void buttonClickedForBattle(Allie* al, Ennemi& en);
    void buttonClickedForReset(Ennemi& en);
+
+private slots:
+   void setArmeAllie(QString &arme);
+
 protected:
    void mousePressEvent(QMouseEvent*);
 };

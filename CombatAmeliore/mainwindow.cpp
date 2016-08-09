@@ -30,8 +30,10 @@ MainWindow::MainWindow(int width, int height)
     setTheme(*carteActuelle);
 
     prepareLog();
+    prepareArmes();
     prepareTable();
     prepareMenus();
+    prepareDeroulement();
     prepareTeleportation();
     prepareEnnemis();
 
@@ -129,7 +131,7 @@ void MainWindow::prepareTable()
     // Création des boutons d'action
     QIcon epee(QPixmap(":/images/excalibur.png"));
     QIcon flamme(QPixmap(":/images/flame.png"));
-    QIcon fusil(QPixmap(":/images/arcturus.png"));
+    QIcon fusil(QPixmap(":/images/fusils/arcturus.png"));
     QPushButton* vanAttaque = new QPushButton(epee, tr("Attaquer"));
     thablierAttaque = new MyButton(fusil, tr("Attaquer"), bal);
     frANAttaque = new MyButton(flamme, tr("Feu"), fra);
@@ -145,6 +147,8 @@ void MainWindow::prepareTable()
     connect(thablierAttaque, SIGNAL(buttonClickedForBattle(Allie*,Ennemi&)), this, SLOT(attaqueSimple(Allie*,Ennemi&)));
     connect(frANAttaque, SIGNAL(buttonClickedForBattle(Allie*,Ennemi&)), this, SLOT(feuSimple(Allie*,Ennemi&)));
 
+    // Connexion de la liste des fusils avec le slot de changement
+    connect(changementFusils, SIGNAL(nouveauFusil(QString&)), thablierAttaque, SLOT(setArmeAllie(QString&)));
 
     // Ajout des éléments précédents à la disposition du tableau
     grille->addWidget(header1, 0, 0);
@@ -185,6 +189,20 @@ void MainWindow::prepareMenus()
     autre->addAction(apropos);
 
     menuBar()->setPalette(QPalette(QColor("grey")));
+}
+
+/** Cette méthode initialise le panneau de description des actions */
+void MainWindow::prepareDeroulement()
+{
+    deroulement = new MyLabel(this);
+    deroulement->setFrameStyle(QFrame::Panel || QFrame::Raised);
+    deroulement->setLineWidth(3);
+    deroulement->setPalette(QColor("white"));
+    deroulement->setAutoFillBackground(true);
+    deroulement->move(300, 600);
+    deroulement->resize(500, 100);
+    deroulement->setAlignment(Qt::AlignCenter);
+    deroulement->hide();
 }
 
 /** Cette méthode initialise les lieux possibles de la fenêtre globale */
@@ -249,6 +267,40 @@ void MainWindow::prepareEnnemis()
     connect(change, SIGNAL(clicked()), this, SLOT(changeEnnemi()));
 
     setEnnemi(*ma);
+}
+
+/** Cette méthode initialise le choix des armes */
+void MainWindow::prepareArmes()
+{
+    // Création de la liste déroulante
+    changementFusils = new MyComboBox(this);
+    FusilListe fl;
+    map<QString, const Fusil*> themap = fl.getFusils();
+    for(map<QString, const Fusil*>::iterator it = themap.begin(); it != themap.end(); ++it)
+    {
+        const Fusil* f = it->second;
+        cout << "Arme de la liste:::: " << f->getNom().toStdString() << endl;
+        QIcon icone(QPixmap(":/images/fusils/" + it->first + ".png"));
+        changementFusils->addItem(icone, f->getNom(), QVariant::fromValue(f));
+    }
+    cout << "Count: " << themap.size() << endl;
+    changementFusils->move(10, 250);
+    changementFusils->resize(130, 30);
+    changementFusils->show();
+
+    // Création de la miniature d'arme
+    MyLabel* armePic = new MyLabel(this);
+    connect(changementFusils, SIGNAL(nouveauFusil(QString&)), armePic, SLOT(setPicArme(QString&)));
+    armePic->show();
+
+    // Création du son associé au changement d'arme
+    QMediaPlayer* bp = new QMediaPlayer(this);
+    bp->setMedia(QUrl("qrc:/sons/phrases/balthier.mp3"));
+    connect(changementFusils, SIGNAL(nouveauFusilSon()), bp, SLOT(play()));
+
+    // Agrandissement de la miniature lors du survol souris
+    connect(armePic, SIGNAL(agrandis()), armePic, SLOT(agrandir()));
+    connect(armePic, SIGNAL(reduis()), armePic, SLOT(reduire()));
 }
 
 void MainWindow::setLog(const QString& text, QTextEdit& boiteDeLog)
@@ -361,7 +413,6 @@ void MainWindow::genericBio(int x, int y, int r, int g, int b, QString& descript
 /** Cette méthode affiche le cri du monstre au-dessus de son image lorsqu'il contre-attaque */
 void MainWindow::bioCombat(Ennemi &e)
 {
-    cout << "biocombat appelé" << endl;
     MyLabel* bio = new MyLabel(243, 237, 196, this);
     bio->setText(e.getCri());
     bio->setWordWrap(true);
@@ -380,6 +431,7 @@ void MainWindow::bioCombat(Ennemi &e)
 /** Cette méthode, appelée avec le bouton Attaque, déclenche une attaque simple contre l'ennemi à l'écran */
 void MainWindow::attaqueSimple(Allie* a, Ennemi& e)
 {
+    cout << "Nouveau fusil, d'Attaque: " << a->getStat("attaque") << endl;
     setLog(e.getNom() + tr(" prépare l'action: "), e.getActionPrincipale(), *log);
 
     // BOUM
@@ -387,14 +439,6 @@ void MainWindow::attaqueSimple(Allie* a, Ennemi& e)
     soundBim->setMedia(QUrl("qrc:/sons/shot.wav"));
     soundBim->play();
 
-    // Initialisation du panneau de description des actions
-    deroulement->setFrameStyle(QFrame::Panel || QFrame::Raised);
-    deroulement->setLineWidth(3);
-    deroulement->setPalette(QColor("white"));
-    deroulement->setAutoFillBackground(true);
-    deroulement->move(300, 600);
-    deroulement->resize(500, 100);
-    deroulement->setAlignment(Qt::AlignCenter);
     deroulement->show();
     cout << "L'allié est: " << a->getNom().toStdString() << " (" << a->getPV() << "/" << a->getPVmax()
          << ") avec comme butin: " << ((a->getButins().empty())?"rien":(a->getButins().at(0)).toStdString())
@@ -422,7 +466,6 @@ void MainWindow::attaqueSimple(Allie* a, Ennemi& e)
     else
         // Au tour du monstre d'attaquer!
     {
-        cout << "1°°° Combat pas encore terminé --> contre-attaque" << endl;
         timer1 = new MyTimer("timerAttaqueRetourPréparation", e, a);
         connect(timer1, SIGNAL(timeoutNowAttack(Ennemi&,Allie*)), this, SLOT(attaqueRetourPreparation(Ennemi&,Allie*)));
         timer1->start(2000);
@@ -439,15 +482,6 @@ void MainWindow::feuSimple(Allie *a, Ennemi &e)
     soundBim->setMedia(QUrl("qrc:/sons/feu2.wav"));
     soundBim->play();
 
-    // Création du panneau de description des actions
-    deroulement = new MyLabel(this);
-    deroulement->setFrameStyle(QFrame::Panel || QFrame::Raised);
-    deroulement->setLineWidth(3);
-    deroulement->setPalette(QColor("white"));
-    deroulement->setAutoFillBackground(true);
-    deroulement->move(300, 600);
-    deroulement->resize(500, 100);
-    deroulement->setAlignment(Qt::AlignCenter);
     deroulement->show();
     cout << "L'allié est: " << a->getNom().toStdString() << " (" << a->getPV() << "/" << a->getPVmax()
          << ") avec comme butin: " << ((a->getButins().empty())?"rien":(a->getButins().at(0)).toStdString())
@@ -475,7 +509,6 @@ void MainWindow::feuSimple(Allie *a, Ennemi &e)
     else
         // Au tour du monstre d'attaquer!
     {
-        cout << "1°°° Combat pas encore terminé --> contre-attaque" << endl;
         timer1 = new MyTimer("timerAttaqueRetourPréparation", e, a);
         connect(timer1, SIGNAL(timeoutNowAttack(Ennemi&,Allie*)), this, SLOT(attaqueRetourPreparation(Ennemi&,Allie*)));
         timer1->start(2000);
@@ -485,7 +518,6 @@ void MainWindow::feuSimple(Allie *a, Ennemi &e)
 /** Les méthodes suivantes servent à la contre-attaque du monstre */
 void MainWindow::attaqueRetourPreparation(Ennemi &e, Allie *a)
 {
-    cout << "2°°° Méthode de préparation" << endl;
     cout << e.getNom().toStdString() << " ne se laisse pas faire face à " << a->getNom().toStdString() << "!" << endl;
     timer1->stopAndBlock();
     deroulement->setText(tr("CONTRE-ATTAQUE!"));
@@ -498,9 +530,6 @@ void MainWindow::attaqueRetourPreparation(Ennemi &e, Allie *a)
 
 void MainWindow::attaqueRetour(Ennemi &e, Allie* a)
 {
-    cout << "3°°° Méthode d'attaque du monstre" << endl;
-    cout << "L'allié est: " << a->getNom().toStdString() << " (" << a->getPV() << "/" << a->getPVmax()
-         << ") et l'ennemi est: " << e.getNom().toStdString() << " (" << e.getPV() << "/" << e.getPVmax() << ")" << endl;
     timer2->stopAndBlock(); timerBioCombat->stopAndBlock();
     soundBim->setMedia(QUrl("qrc:/sons/punch.wav"));
     soundBim->play();
@@ -509,6 +538,15 @@ void MainWindow::attaqueRetour(Ennemi &e, Allie* a)
     if(a->getPV() == 0)
     {
         setLog(a->getNom() + tr(" s'effondre..."), *log);
+        // déconnecter la fonction de combat liée à cet allié
+        if(a == thablierAttaque->getAllie())
+        {
+            disconnect(thablierAttaque, SIGNAL(buttonClickedForBattle(Allie*,Ennemi&)), 0, 0);
+        }
+        else if(a == frANAttaque->getAllie())
+        {
+            disconnect(frANAttaque, SIGNAL(buttonClickedForBattle(Allie*,Ennemi&)), 0, 0);
+        }
     }
 }
 
@@ -579,9 +617,13 @@ void MainWindow::setArrPlan(const QString &image)
 /** Cette méthode modifie la musique de fond avec l'URI donnée */
 void MainWindow::setMusique(const QString &musique)
 {
-    player->setMedia(QUrl(musique));
+    QMediaPlaylist* pl = new QMediaPlaylist();
+    pl->addMedia(QUrl(musique));
+    pl->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+    player->setPlaylist(pl);
     player->setVolume(40);
     player->play();
+
     if(carteActuelle->getInversion()) // c'est tout noir, nécessité d'inverser les couleurs
         sound->setPixmap(QPixmap(":/images/sound_off_inv.png"));
     else
@@ -665,6 +707,7 @@ void MainWindow::changeEnnemi()
     QString changement = tr("L'ennemi est ") + it->second->getNom() + tr(" --- (PV: ")
             + QString::number(it->second->getPV()) + "/" + QString::number(it->second->getPVmax()) + ")";
     deroulement->setText(changement);
+    deroulement->show();
 }
 
 MainWindow::~MainWindow()

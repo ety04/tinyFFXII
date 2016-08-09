@@ -38,3 +38,4 @@ double aleatoire()
 
     return distr(eng);
 }
+

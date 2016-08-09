@@ -22,6 +22,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMediaPlayer>
+#include <QMediaPlaylist>
 #include <QComboBox>
 
 #include "helpers/mylabel.h"
@@ -52,11 +53,13 @@ public:
     void setLog(const QString& text, const QString& textHighlight, QTextEdit& boiteDeLog);
     const QString getLog(QTextEdit* boiteDeLog);
     void prepareLog();
+    void prepareDeroulement();
     void prepareTable();
     void prepareMenus();
     void prepareLieux();
     void prepareTeleportation();
     void prepareEnnemis();
+    void prepareArmes();
     void genericBio(int x, int y, int r, int g, int b, QString& description); 
     void bioCombat(Ennemi& e);
     void setArrPlan(const QString& image);
@@ -87,6 +90,7 @@ private:
     MyComboBox* teleportation;
     std::map<QString, Ennemi*> ennemis;
     Ennemi* monstreActuel;
+    MyComboBox* changementFusils;
 
 public slots:
 

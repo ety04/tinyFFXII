@@ -7,7 +7,12 @@ Equipement::Equipement()
 
 }
 
-Equipement::Equipement(string nom)
+Equipement::Equipement(QString nom)
 {
     this->nom = nom;
+}
+
+QString Equipement::getNom() const
+{
+    return nom;
 }

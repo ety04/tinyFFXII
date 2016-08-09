@@ -15,7 +15,18 @@ Balthier::Balthier() :
     setStat("vigueur", 38);
     setStat("vitesse", 29);
 
-    Fusil* arcturus = new Fusil("Arcturus", 44);
-    setStat("attaque", arcturus->getAttaque());
-    setStat("parade", getStat("parade") + arcturus->getParade());
+    QString nom("arcturus");
+    setFusil(nom);
+}
+
+void Balthier::setFusil(QString& nomFusil)
+{
+    f = fl.getFusils().at(nomFusil);
+    setStat("attaque", f->getAttaque());
+    setStat("parade", getStat("parade") + f->getParade());
+}
+
+const Fusil* Balthier::getFusil() const
+{
+    return f;
 }

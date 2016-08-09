@@ -1,22 +1,22 @@
 #include "mytextedit.h"
 
-    //cpp
+//cpp
 
-    MyTextEdit::MyTextEdit(QWidget * parent=0)
-        :QTextEdit(parent)
-    {
-    }
+MyTextEdit::MyTextEdit(QWidget * parent=0)
+    :QTextEdit(parent)
+{
+}
 
-    MyTextEdit::MyTextEdit(const QString & text, QWidget * parent=0)
-        :QTextEdit(text, parent)
-    {
-    }
+MyTextEdit::MyTextEdit(const QString & text, QWidget * parent=0)
+    :QTextEdit(text, parent)
+{
+}
 
-    MyTextEdit::~MyTextEdit()
-    {
-    }
+MyTextEdit::~MyTextEdit()
+{
+}
 
-    void MyTextEdit::mousePressEvent(QMouseEvent*)
-    {
-        emit clicked();
-    }
+void MyTextEdit::mousePressEvent(QMouseEvent*)
+{
+    emit clicked();
+}

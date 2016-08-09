@@ -2,6 +2,7 @@
 #define ALLIE_H
 
 #include "cible.h"
+#include "../equip/equipement.h"
 
 
 class Allie : public Cible

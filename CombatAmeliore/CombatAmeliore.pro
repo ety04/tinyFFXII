@@ -41,7 +41,8 @@ SOURCES += main.cpp\
     target/destrierfantome.cpp \
     target/poulatrice.cpp \
     target/gelee.cpp \
-    target/treant.cpp
+    target/treant.cpp \
+    equip/fusilliste.cpp
 
 HEADERS  += mainwindow.h \
     systeme.h \
@@ -68,7 +69,8 @@ HEADERS  += mainwindow.h \
     target/destrierfantome.h \
     target/poulatrice.h \
     target/gelee.h \
-    target/treant.h
+    target/treant.h \
+    equip/fusilliste.h
 
 TRANSLATIONS = combatameliore_en.ts
 

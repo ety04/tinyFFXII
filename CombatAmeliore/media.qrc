@@ -35,6 +35,17 @@
         <file>images/monstres/gelee.png</file>
         <file>images/monstres/poulatrice.png</file>
         <file>images/monstres/treant.png</file>
-        <file>images/arcturus.png</file>
+        <file>images/fusils/aldebaran.png</file>
+        <file>images/fusils/altair.png</file>
+        <file>images/fusils/antares.png</file>
+        <file>images/fusils/arcturus.png</file>
+        <file>images/fusils/betelgeuse.png</file>
+        <file>images/fusils/capella.png</file>
+        <file>images/fusils/fomalhaut.png</file>
+        <file>images/fusils/ras_algethi.png</file>
+        <file>images/fusils/sirius.png</file>
+        <file>images/fusils/spica.png</file>
+        <file>images/fusils/vega.png</file>
+        <file>sons/phrases/balthier.mp3</file>
     </qresource>
 </RCC>
